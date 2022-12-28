@@ -1,10 +1,10 @@
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity } from 'react-native';
 
 const ItemPost = ({ data, openComment, id }) => {
   return (
     <TouchableOpacity style={styles.wrap} onPress={() => openComment(id)}>
       <Text style={styles.title}>{data.title}</Text>
-      <Text style={styles.body}>{data.body}</Text>
+      <Text>{data.body}</Text>
     </TouchableOpacity>
   );
 };
@@ -26,7 +26,6 @@ const styles = StyleSheet.create({
 
     marginBottom: 10,
   },
-  body: {},
 });
 
 export default ItemPost;

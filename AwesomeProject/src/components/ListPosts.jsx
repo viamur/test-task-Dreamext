@@ -6,6 +6,7 @@ const ListPosts = ({ posts, handleOpenComment }) => {
   return (
     <FlatList
       data={posts}
+      style={{ paddingTop: 20, paddingBottom: 20 }}
       renderItem={({ item }) => (
         <ItemPost data={item} openComment={handleOpenComment} id={item.id} />
       )}

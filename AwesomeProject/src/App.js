@@ -6,8 +6,9 @@
  * @flow strict-local
  */
 
-import React from 'react';
-import { Button, Text, TouchableOpacity } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import NetInfo from "@react-native-community/netinfo";
+import { Button, StyleSheet, Text, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
@@ -18,14 +19,33 @@ import HomeScreen from './Screens/HomeScreen';
 const Stack = createNativeStackNavigator();
 
 const App = () => {
+  const [netInfo, setNetInfo] = useState(true);
+
+  useEffect(() => {
+    // Subscribe
+    const unsubscribe = NetInfo.addEventListener(state => {
+      setNetInfo(state.isConnected)
+    });
+
+    // Unsubscribe
+    return () => {
+      unsubscribe();
+    }
+  }, [])
+
+
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
+        <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: !netInfo, headerTitleAlign: 'center', title: 'Відсутнє інтернет з’яднання', headerStyle: { backgroundColor: '#ff8080' } }} />
         <Stack.Screen name="Home" component={HomeScreen} options={({ navigation, route }) => ({
           headerRight: props => (
-            <Button title='logOut' color='#3EB489' onPress={() => { navigation.navigate('Login') }} />
+            netInfo && <Button title='logOut' color='#3EB489' onPress={() => { navigation.navigate('Login') }} />
           ),
+          headerStyle: {
+            backgroundColor: !netInfo ? '#ff8080' : null,
+          },
+          title: netInfo ? 'Home' : 'Відсутнє інтернет з’яднання',
           headerBackVisible: false,
           headerTitleAlign: 'center',
         })} />
@@ -33,5 +53,6 @@ const App = () => {
     </NavigationContainer>
   );
 };
+
 
 export default App;

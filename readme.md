@@ -8,4 +8,4 @@
 <li>react-native-file-access</li>
 </ul>
 
-![GitHub actions settings](./screenshots.jpg) ![GitHub actions settings](./screenshot.jpg)
+![GitHub actions settings](./screenshots.jpg) ![GitHub actions settings](./screenshot.png)

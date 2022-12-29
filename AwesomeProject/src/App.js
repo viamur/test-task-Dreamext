@@ -8,7 +8,7 @@
 
 import React, { useEffect, useState } from 'react';
 import NetInfo from "@react-native-community/netinfo";
-import { Button, StyleSheet, Text, View } from 'react-native';
+import { Button } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
@@ -37,8 +37,8 @@ const App = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: !netInfo, headerTitleAlign: 'center', title: 'Відсутнє інтернет з’яднання', headerStyle: { backgroundColor: '#ff8080' } }} />
-        <Stack.Screen name="Home" component={HomeScreen} options={({ navigation, route }) => ({
+        <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: true, headerTitleAlign: 'center', title: netInfo ? '' : 'Відсутнє інтернет з’яднання', headerStyle: { backgroundColor: netInfo ? null : '#ff8080' }, headerShadowVisible: false }} />
+        <Stack.Screen name="Home" options={({ navigation, route }) => ({
           headerRight: props => (
             netInfo && <Button title='logOut' color='#3EB489' onPress={() => { navigation.navigate('Login') }} />
           ),
@@ -48,7 +48,9 @@ const App = () => {
           title: netInfo ? 'Home' : 'Відсутнє інтернет з’яднання',
           headerBackVisible: false,
           headerTitleAlign: 'center',
-        })} />
+        })} >
+          {(props) => <HomeScreen {...props} netInfo={netInfo} />}
+        </Stack.Screen>
       </Stack.Navigator>
     </NavigationContainer>
   );

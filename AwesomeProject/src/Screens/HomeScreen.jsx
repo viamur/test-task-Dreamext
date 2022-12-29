@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
+import { Dirs, FileSystem } from 'react-native-file-access';
 
 import Preloader from '../components/Preloader';
 import ListPosts from '../components/ListPosts';
@@ -8,7 +9,7 @@ import ModalComments from '../components/ModalComments';
 import { getPosts } from '../utils/api';
 import snackbar from '../utils/snackbar';
 
-const HomeScreen = () => {
+const HomeScreen = ({ netInfo }) => {
   const [posts, setPosts] = useState([]);
 
   const [modalVisible, setModalVisible] = useState(false);
@@ -23,11 +24,39 @@ const HomeScreen = () => {
     snackbar({ cb });
   };
 
+  const workWithFileSystem = async ({ type, data }) => {
+    try {
+      if (type === 'write') {
+        await FileSystem.writeFile(Dirs.CacheDir + '/posts.json', JSON.stringify(data));
+        return;
+      }
+
+      if (type === 'read') {
+        const dataFile = await FileSystem.readFile(Dirs.CacheDir + '/posts.json');
+        const dataParse = JSON.parse(dataFile);
+
+        return dataParse;
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const allPostGet = async () => {
     try {
       setIsLoading(true);
 
-      const data = await getPosts();
+      let data;
+
+      if (netInfo) {
+        data = await getPosts();
+        await workWithFileSystem({ type: 'write', data });
+      }
+
+      if (!netInfo) {
+        data = await workWithFileSystem({ type: 'read' });
+      }
+
       setPosts(data);
     } catch (error) {
       console.log('allPostGet', error);

@@ -82,6 +82,7 @@ const LoginScreen = ({ navigation }) => {
               style={styles.textInput}
             />
           </View>
+          {error && <Text style={styles.errorText}>{error}</Text>}
           {email && password && (
             <TouchableOpacity
               activeOpacity={0.8}
@@ -91,7 +92,6 @@ const LoginScreen = ({ navigation }) => {
               <Text style={styles.btnText}>Login</Text>
             </TouchableOpacity>
           )}
-          {error && <Text style={styles.errorText}>{error}</Text>}
         </View>
       </TouchableWithoutFeedback>
     </KeyboardAvoidingView>
@@ -106,12 +106,12 @@ const styles = StyleSheet.create({
   inner: {
     padding: 24,
     flex: 1,
-    justifyContent: 'space-around',
+    justifyContent: 'center',
   },
   header: {
     fontSize: 36,
     textAlign: 'center',
-    marginBottom: 48,
+    marginBottom: 30,
     fontWeight: '700',
     color: '#282828',
   },
@@ -126,6 +126,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     borderRadius: 4,
     marginTop: 12,
+    marginBottom: 50,
   },
   btnText: {
     textAlign: 'center',
